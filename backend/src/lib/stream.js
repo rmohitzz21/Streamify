@@ -8,8 +8,10 @@ if(!apiKey || !apiSecret){
     console.error("STREAM_API_KEY and STREAM_API_SECRET Missing.");
 }
 
+// Initialize the StreamChat client with the API key and secret
 const streamClient  = StreamChat.getInstance(apiKey, apiSecret);
 
+// This function fetches the Stream user details for a given userId
 export const upsertStreamUser = async (userData) => {
     try{
 
@@ -21,4 +23,15 @@ export const upsertStreamUser = async (userData) => {
 }
 
 
-export const generateStreamToken = (userId) => {};
+// This function generates a Stream token for a user
+export const generateStreamToken = (userId) => {
+
+    try {
+        // StreamClient is initialized with the API key and secret
+        const userIdStr = userId.toString();
+        return streamClient.createToken(userIdStr);
+    } catch (error) {
+        console.error("Error generating Stream token:", error);
+    }
+    
+};

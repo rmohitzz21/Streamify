@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 export async function signup(req, res) {
     // res.send("Signup Route ");
-    const { email, password,fullName } = req.body;
+    const {  fullName, email, password } = req.body;
 
     try {
         if(!email || !password || !fullName){
@@ -129,6 +129,62 @@ export async function logout(req, res) {
 
 
 export async function onboard(req, res) {
+   
+    try {
+    // onboard used to update the user profile after signup
+    const userId = req.user._id;
+    const {fullName, bio, nativeLanguage, learningLanguage, location} = req.body;
+
+    if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location){
+        return res.status(400).json({ message : "All Fields are required",
+            missigFields: [
+                !fullName && "fullName",
+                !bio && "bio",
+                !nativeLanguage && "nativeLanguage",
+                !learningLanguage && "learningLanguage",
+                !location && "location"
+        ].filter(Boolean)
+        });
+    } 
 
     
+    const updatedUser  = await User.findByIdAndUpdate(userId, {
+        // used to update the user profile
+        fullName,
+        bio,
+        nativeLanguage,
+        learningLanguage,
+        location,
+        isOnboarded: true,
+
+    }, {new : true});
+
+
+    if(!updatedUser){
+        return res.status(404).json({ message: "User not found" });
+
+     try {
+        // used upsertStreamUser to create or update the user in Stream
+           await upsertStreamUser({
+               id: updatedUser._id.toString(),
+               name:updatedUser.fullName,
+               image: updatedUser.profilePic || "",
+           })
+           console.log(`Stream User Updated SuccessFully : ${updatedUser.fullName}`);
+           
+     } catch (streamError) {
+        console.log("Error in upserting user in Stream: ", streamError);
+     }
+    }
+
+    return res.status(200).json({
+      message: "User onboarded successfully",
+      user: updatedUser,
+    });
+}catch (error) {
+        console.error("Error in onboard controller:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+
+    }
+
 }

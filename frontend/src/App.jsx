@@ -1,35 +1,89 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { axiosInstance } from "./lib/axios.js";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import React from "react";
+import { Routes } from "react-router";
+import HomePage from "./pages/HomePage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import NotificationsPage from "./pages/NotificationsPage.jsx";
+import CallPage from "./pages/CallPage.jsx";
+import ChatPage from "./pages/ChatPage.jsx";
+import OnboardingPage from "./pages/OnboardingPage.jsx";
+import { Navigate, Route } from "react-router";
+import PageLoader from "./components/PageLoader.jsx";
+import { getAuthUser } from "./lib/api.js";
+import useAuthUser from "./hooks/useAuthUser.js";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  // tanstack query
+
+  const { isLoading, authUser } = useAuthUser();
+
+  const isAuthenticated = Boolean(authUser);
+  const isOnboarded = authUser?.isOnboarded;
+
+  if (isLoading) return <PageLoader />;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="h-screen" data-theme="forest">
+      {/* <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" /> } />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes> */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <HomePage />
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
+        <Route
+          path="/signup"
+          element={!isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />}
+        />
+        <Route
+          path="/login"
+          element={
+            !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />}
+        />
+        <Route
+          path="/notification"
+          element={
+            !isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/chat"
+          element={!isAuthenticated ? <ChatPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/call"
+          element={!isAuthenticated ? <CallPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/onboarding"
+          element={
+            isAuthenticated ? (
+              !isOnboarded ? (
+                <OnboardingPage />
+              ) : (
+                <Navigate to="/" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+    
+      </Routes>
+    </div>
+  );
+};
 
-export default App
+export default App;

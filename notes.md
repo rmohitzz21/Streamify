@@ -88,3 +88,26 @@ Update user's first-login status
 
 Create a welcome channel in Stream, etc.
 
+
+Use daisy Ui  -> For Easy Button Code
+
+Tailwind
+React Route
+React-host-toast -> For Alertv ✅
+
+ axios
+ react query 
+ tanstack query :=> TanStack Query (React Query) simplifies working with remote data (like APIs). Instead of manually handling loading, error states, caching, and re-fetching, it does all that for you with hooks like useQuery.
+
+
+✅ When to Use TanStack Query?
+Use it when:
+
+You need to fetch data from APIs.
+You want auto caching, re-fetching, and background updates.
+Your app grows and you need organized data fetching logic.
+
+✅ What is Axios?
+Axios is a promise-based HTTP client for the browser and Node.js, used to send HTTP requests (like GET, POST, PUT, DELETE) to APIs.
+
+It's an alternative to the built-in fetch() method in JavaScript — but with more features and a simpler syntax.
