@@ -96,7 +96,8 @@ export  async function login(req, res) {
         const token = jwt.sign({userId:user._id}, process.env.JWT_SECRET_KEY, {
             expiresIn: '7d' 
         })
-
+        console.log(res);
+        
         res.cookie("token", token, {
             maxAge : 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
             httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
@@ -104,9 +105,9 @@ export  async function login(req, res) {
             sameSite : "strict" // Helps prevent CSRF attacks
         })
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            user: user,
+            user,
         })
 
     } catch (error) {
@@ -119,12 +120,11 @@ export  async function login(req, res) {
 
 export async function logout(req, res) {
     // res.send("Logout Route ");
-    res.clearCookie("jwt")
+    res.clearCookie("token")
     res.status(200).json({
         success: true,
         message: "Logged out successfully"
     })
-
 }
 
 

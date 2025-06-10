@@ -1,7 +1,7 @@
 import express from 'express';
 import { protectRoute } from '../middleware/auth.middleware.js';
 
-import { getRecommedndedUsers, getMyFriends, acceptFriendRequest, sendFriendRequest, getFriendRequest, getOutgoingFriendRequest }  from '../controller/user.controller.js';
+import { getRecommedndedUsers, getMyFriends, acceptFriendRequest, sendFriendRequest, getFriendRequests, getOutgoingFriendRequest }  from '../controller/user.controller.js';
 
 
 const router = express.Router();
@@ -14,10 +14,10 @@ router.get("/friends", getMyFriends);
 
 
 router.post("/friend-request/:id", sendFriendRequest); 
-router.put("/friend-request/:id",acceptFriendRequest);
-router.put("/friend-request/:id/reject", acceptFriendRequest); // Assuming you want to handle rejection with the same endpoint
+router.put("/friend-request/:id/accept",acceptFriendRequest);
+// router.put("/friend-request/:id/reject", acceptFriendRequest); // Assuming you want to handle rejection with the same endpoint
 
-router.get("/friend-request", getFriendRequest);
-router.get("/outgoing-friend-request", getOutgoingFriendRequest);
+router.get("/friend-requests", getFriendRequests);
+router.get("/outgoing-friend-requests", getOutgoingFriendRequest);
 
 export default router;

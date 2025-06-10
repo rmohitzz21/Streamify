@@ -1,10 +1,11 @@
 import React from "react";
 // import { Link } from "react-router";
 import { ShipWheelIcon } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signup } from "../lib/api";
+// import { signup } from "../lib/api";
 import { Link } from "react-router";
 import { useState } from "react";
+
+import useSignup from "../hooks/useSignup.js";
 
 
 const SignUpPage = () => {
@@ -14,18 +15,14 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();  
 
-  const {mutate:signupMutation, isPending, error} = useMutation({
-    mutationFn: signup,
-    onSuccess: () => queryClient.invalidateQueries({queryKey: ["authUser"]}),
-  })
-  // const queryClient = useQueryClient();
-  // const {mutate: signupMutation, isPending, error} = useMutation({
+  // const {mutate:signupMutation, isPending, error} = useMutation({
   //   mutationFn: signup,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+  //   onSuccess: () => queryClient.invalidateQueries({queryKey: ["authUser"]}),
   // })
 
+  const {isPending,error,signupMutation}= useSignup()
   const handleSignup = (e) => {
     e.preventDefault();
     signupMutation(signupData);
@@ -194,3 +191,13 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+
+// import React from 'react'
+
+// const SignUpPage = () => {
+//   return (
+//     <div>SignUpPage</div>
+//   )
+// }
+
+// export default SignUpPage

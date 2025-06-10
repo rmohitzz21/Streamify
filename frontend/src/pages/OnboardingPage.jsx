@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthUser from "../hooks/useAuthUser";
 import { useState } from "react";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   CameraIcon,
   ShuffleIcon,
   MapPinIcon,
   ShipWheelIcon,
+  LoaderIcon
 } from "lucide-react";
 import { completeOnboarding } from "../lib/api";
 import { LANGUAGES } from "../constants";
@@ -43,8 +44,9 @@ const OnboardingPage = () => {
   };
 
   const handleRandomAvatar = () => {
-     const idx = Math.floor(Math.random() * 100) + 1; // 1-100 included
+    const idx = Math.floor(Math.random() * 100) + 1; // 1-100 included
     const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+
     setFormState({ ...formState, profilePic: randomAvatar });
     toast.success("Random profile picture generated!");
   };

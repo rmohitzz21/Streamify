@@ -76,7 +76,7 @@ export async function sendFriendRequest(req, res) {
         }
 
         // Check if a friend request already exists
-        const existingRequest = await User.findOne({
+        const existingRequest = await FriendRequest.findOne({
             $or:[
                 {sender: myId, recipient: recipientId},
                 {sender : recipientId, recipient: myId},
@@ -90,7 +90,7 @@ export async function sendFriendRequest(req, res) {
         // Create a new friend request
         const friendRequest = await FriendRequest.create({
             sender: myId,
-            receiver: recipientId,
+            recipient: recipientId,
         });
 
         res.status(201).json(friendRequest);
@@ -158,25 +158,23 @@ export async function acceptFriendRequest(req, res){
 }
 
 // this function fetches all friend requests for the current user
-export async function getFriendRequest(req, res) {
-    try {
+export async function getFriendRequests(req, res) {
+  try {
+    const incomingReqs = await FriendRequest.find({
+      recipient: req.user.id,
+      status: "pending",
+    }).populate("sender", "fullName profilePic nativeLanguage learningLanguage");
 
-        const incomingReqs = await FriendRequest.find({
-            recipient: req.user.id,
-            status: "pending"
-        })
+    const acceptedReqs = await FriendRequest.find({
+      sender: req.user.id,
+      status: "accepted",
+    }).populate("recipient", "fullName profilePic");
 
-        const acceptedReq  = await FriendRequest.find({
-            sender: req.user.id,
-            status: "accepted",
-        }).populate("recipient", "fullName profilePic")
-
-    } catch (error) {
-        console.error("Error fetching friend requests:", error);
-        res.status(500).json({
-            message: "Internal server error"
-        });
-    }
+    // res.status(200).json({ incomingReqs, acceptedReqs });
+  } catch (error) {
+    console.log("Error in getPendingFriendRequests controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 // This function fetches all outgoing friend requests sent by the current user
@@ -185,7 +183,9 @@ export async function getOutgoingFriendRequest(req, res) {
         const outgoingReqs = await FriendRequest.find({
             sender: req.user.id,
             status: "pending"
-        }).populate("recipient", "fullName profilePic");
+        }).populate("recipient", "fullName profilePic nativeLanguage learningLanguage");
+
+        res.status(200).json(outgoingReqs);
     } catch (error) {
         console.log("Error fetching outgoing friend requests:", error);
         res.status(500).json({

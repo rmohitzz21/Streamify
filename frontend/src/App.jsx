@@ -1,7 +1,3 @@
-import { axiosInstance } from "./lib/axios.js";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import React from "react";
 import { Routes } from "react-router";
 import HomePage from "./pages/HomePage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
@@ -14,30 +10,36 @@ import { Navigate, Route } from "react-router";
 import PageLoader from "./components/PageLoader.jsx";
 import { getAuthUser } from "./lib/api.js";
 import useAuthUser from "./hooks/useAuthUser.js";
+import { Toaster } from "react-hot-toast";
+import Layout from "./components/Layout.jsx";
+import { useState } from "react";
+import { useThemeStore } from "./store/useThemeStore.js";
 
 const App = () => {
   // tanstack query
 
   const { isLoading, authUser } = useAuthUser();
 
+const{theme} = useThemeStore();
+  
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
 
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="h-screen" data-theme="forest">
-      {/* <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" /> } />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes> */}
+    // zustand
+    <div className="h-screen" data-theme={theme}>
+      {/* <button onClick={()=> setTheme("night")}>Update It </button> */}
       <Routes>
         <Route
           path="/"
           element={
             isAuthenticated && isOnboarded ? (
-              <HomePage />
+              <Layout showSidebar={true}>
+                <HomePage />
+               </Layout> 
+
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )
@@ -45,17 +47,27 @@ const App = () => {
         />
         <Route
           path="/signup"
-          element={!isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />}
+          element={
+            !isAuthenticated ? 
+              <SignUpPage /> : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            )
+          }
         />
         <Route
           path="/login"
           element={
-            !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />}
+            !isAuthenticated ? (
+              <LoginPage />
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            )
+          }
         />
         <Route
           path="/notification"
           element={
-            !isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />
+            isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />
           }
         />
         <Route
@@ -80,8 +92,8 @@ const App = () => {
             )
           }
         />
-    
       </Routes>
+      <Toaster />
     </div>
   );
 };
