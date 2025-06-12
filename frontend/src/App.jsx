@@ -12,7 +12,6 @@ import { getAuthUser } from "./lib/api.js";
 import useAuthUser from "./hooks/useAuthUser.js";
 import { Toaster } from "react-hot-toast";
 import Layout from "./components/Layout.jsx";
-import { useState } from "react";
 import { useThemeStore } from "./store/useThemeStore.js";
 
 const App = () => {
@@ -65,14 +64,27 @@ const{theme} = useThemeStore();
           }
         />
         <Route
-          path="/notification"
-          element={
-            isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />
-          }
+          path="/notifications"
+          element=
+            {isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                  <NotificationsPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            ) }
+          
         />
-        <Route
-          path="/chat"
-          element={!isAuthenticated ? <ChatPage /> : <Navigate to="/login" />}
+        <Route  path="/chat"
+          element={isAuthenticated  && isOnboarded ?
+             (
+              <Layout showSidebar={false}>
+                <ChatPage />
+              </Layout>
+             ):
+              (<Navigate to={!isAuthenticated ? "/login" : "/onboarding" } />)   
+
+          }
         />
         <Route
           path="/call"

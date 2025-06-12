@@ -10,7 +10,9 @@ import { Link } from "react-router";
 import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from "lucide-react";
 import FriendCard, { getLanguageFlag } from "../components/FriendCard.jsx";
 import NoFriendsFound from "../components/NoFriendsFound.jsx";
+import { capitialize } from "../lib/utils.js";
 // UserPlusIcon
+// capitialize
 
 const HomePage = () => {
   const queryClient = useQueryClient();
@@ -55,7 +57,7 @@ const HomePage = () => {
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
             Your Friends
           </h2>
-          <Link to="/notification" className="btn btn-outline btn-sm">
+          <Link to="/notifications" className="btn btn-outline btn-sm">
             <UsersIcon className="mr-2 size-4" />
             Friend Requests
           </Link>
@@ -180,4 +182,3 @@ const HomePage = () => {
 
 export default HomePage;
 
-export const capitialize = (str) => str.charAt(0).toUpperCase() + str.slice(1);

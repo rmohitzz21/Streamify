@@ -1,4 +1,3 @@
-import React from 'react'
 import { useQuery } from '@tanstack/react-query';
 import { getAuthUser } from '../lib/api';
 
@@ -12,4 +11,4 @@ const useAuthUser = () => {
   return {isLoading: authUser.isLoading, authUser: authUser.data?.user}
 }
 
-export default useAuthUser
+export default useAuthUser;
