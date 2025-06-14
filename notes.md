@@ -111,3 +111,27 @@ Your app grows and you need organized data fetching logic.
 Axios is a promise-based HTTP client for the browser and Node.js, used to send HTTP requests (like GET, POST, PUT, DELETE) to APIs.
 
 It's an alternative to the built-in fetch() method in JavaScript — but with more features and a simpler syntax.
+
+
+For Chat Page
+ We Use Get Stream Io Package : npm i  stream-chat stream-chat-react
+
+
+ -------Chat-------
+ const chanelId = [authUser._id, targetUserId].sort().join("-");
+
+🔍 The Problem
+If you don’t sort:
+
+If you start the chat, ID becomes:
+channelId = "A-B"
+
+If your friend starts the chat, ID becomes:
+channelId = "B-A"
+
+➡️ Now you have two different channel IDs for the same two users — ❌ bad.
+
+✅ The Solution
+By using .sort():
+[A, B].sort() → [A, B]
+[B, A].sort() → [A, B]

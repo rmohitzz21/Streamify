@@ -14,8 +14,7 @@ const streamClient  = StreamChat.getInstance(apiKey, apiSecret);
 // This function fetches the Stream user details for a given userId
 export const upsertStreamUser = async (userData) => {
     try{
-
-        await streamClient.upsertUsers([userData]);
+       await streamClient.upsertUsers([userData]);
         return userData;
     }catch(error){
         console.error("Error in upse")
@@ -25,13 +24,11 @@ export const upsertStreamUser = async (userData) => {
 
 // This function generates a Stream token for a user
 export const generateStreamToken = (userId) => {
-
-    try {
-        // StreamClient is initialized with the API key and secret
-        const userIdStr = userId.toString();
-        return streamClient.createToken(userIdStr);
-    } catch (error) {
-        console.error("Error generating Stream token:", error);
-    }
-    
+  try {
+    // ensure userId is a string
+    const userIdStr = userId.toString();
+    return streamClient.createToken(userIdStr);
+  } catch (error) {
+    console.error("Error generating Stream token:", error);
+  }
 };
