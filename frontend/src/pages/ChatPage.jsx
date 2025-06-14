@@ -78,8 +78,8 @@ const ChatPage = () => {
     };
 
     initChat();
-    console.log("authUser:", authUser);
-    console.log("tokenData:", tokenData);
+    // console.log("authUser:", authUser);
+    // console.log("tokenData:", tokenData);
   }, [tokenData, authUser, targetUserId]);
 
   const handleVideoCall = () => {
