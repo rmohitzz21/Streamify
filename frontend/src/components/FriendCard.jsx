@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { LANGUAGE_TO_FLAG } from "../constants";
 
 const FriendCard = ({ friend }) => {
+   if (!friend) return null; // or render a fallback UI
   return (
     <div className="card bg-base-200 hover:shadow-md transition-shadow">
       <div className="card-body p-4">

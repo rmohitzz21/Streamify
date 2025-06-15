@@ -13,6 +13,8 @@ import useAuthUser from "./hooks/useAuthUser.js";
 import { Toaster } from "react-hot-toast";
 import Layout from "./components/Layout.jsx";
 import { useThemeStore } from "./store/useThemeStore.js";
+import FriendCard from "./components/FriendCard.jsx";
+import FriendsPage from "./pages/FriendsPage.jsx";
 
 const App = () => {
   // tanstack query
@@ -94,6 +96,13 @@ const App = () => {
           element={
             isAuthenticated && isOnboarded ? (
                 <CallPage />
+              ) : (
+                <Navigate to={!isAuthenticated ? "/login" : "/onboarding" }/>
+              )
+          }
+        />
+          <Route path="/friends" element={isAuthenticated && isOnboarded ? (
+                <FriendsPage />
               ) : (
                 <Navigate to={!isAuthenticated ? "/login" : "/onboarding" }/>
               )
