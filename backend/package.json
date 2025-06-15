@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "nodemon src/server.js"
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
-    "stream-chat": "^8.60.0"
+    "stream-chat": "^8.60.0",
+    "streamify": "file:.."
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
